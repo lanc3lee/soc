@@ -365,3 +365,56 @@ ts           src_ip         src_port  dst_ip        dst_port  proto  duration  b
 
 ------
 
+### JA3 fingerprinting — a particularly powerful Zeek feature
+
+One of Zeek's most valuable capabilities for SOC work is **JA3 fingerprinting** of TLS connections. When a client initiates a TLS handshake, the specific combination of cipher suites, extensions, and elliptic curves it offers creates a fingerprint that is surprisingly consistent per application.
+
+Malware families often have distinctive JA3 fingerprints — even when communicating over HTTPS to legitimately-looking domains — because the TLS library they use produces the same handshake every time. Zeek logs the JA3 hash for every TLS connection, and we can query those hashes against threat intelligence feeds to identify known malware communicating on your network.
+
+In oour lab, look these up at [ja3er.com](https://ja3er.com) to see what applications produce which fingerprints.
+
+---
+
+### How Zeek and Suricata work together in an investigation
+
+The real power comes from combining both. Here's a realistic investigation flow:
+
+Suricata fires an alert — _"ET MALWARE Suspicious User-Agent"_ from `192.168.1.45` to an external IP. Pivot to Zeek:
+
+**Step 1 — Check conn.log** for all connections from `192.168.1.45` in the surrounding timeframe. How many connections? To how many different IPs? How much data transferred? Are there long-duration connections suggesting C2 beaconing?
+
+**Step 2 — Check dns.log** for DNS queries from that host. Did it resolve any unusual domains right before the alert? Any DGA-looking domains (random character strings)? Any queries to known malicious domains?
+
+**Step 3 — Check http.log** for the specific connection that triggered the alert. What was the full URI? What user agent string? What did the server return?
+
+**Step 4 — Check ssl.log** for TLS connections from that host. Any self-signed certificates? Certificates with suspicious subjects? Unusual JA3 hashes?
+
+**Step 5 — Check files.log** to see if anything was downloaded. If so, cross-reference the file hash against VirusTotal.
+
+This five-step pivot chain reconstructs exactly what happened — even if Suricata only caught one small piece of it.
+
+---
+
+### Querying Zeek logs in your lab
+
+In the Security Onion Hunt interface, Zeek logs are queryable just like any other data source. Some useful starting queries to practice:
+
+Search for large data transfers that might indicate exfiltration:
+
+```
+event.dataset: zeek.conn AND network.bytes > 10000000
+
+```
+
+Find all DNS queries for domains that were only queried once (rare domains — often C2):
+
+```
+event.dataset: zeek.dns AND dns.question.name: *
+
+```
+
+Look for HTTP connections using suspicious user agents:
+
+```
+event.dataset: zeek.http AND NOT user_agent.original: ("Mozilla*" OR "Chrome*" OR "Safari*")
+```
