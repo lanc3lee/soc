@@ -16,7 +16,7 @@ One person could build this entire SIEM in a focused weekend. That's exactly why
 
 ### Role Split
 
-#### 1. Infrastructure & IaC Lead
+#### 1. [Infrastructure & IaC Lead](https://soc.lanc3.com/IaC)
 
 **Owns:** Terraform modules, GitHub Actions CI/CD, AWS resource provisioning
 
@@ -28,7 +28,7 @@ Provisions every AWS resource in the project — EC2, EBS, S3, VPC, GuardDuty, C
 
 ---
 
-#### 2. ELK Platform Engineer
+#### 2. [ELK Platform Engineer](https://soc.lanc3.com/elk)
 
 **Owns:** Docker Compose stack, Elasticsearch/Logstash/Kibana config, JVM tuning, Nginx reverse proxy
 
@@ -39,7 +39,7 @@ Makes the ELK stack actually run — and not fall over — inside a 4GB RAM cons
 
 ---
 
-#### 3. Data Pipeline & OCSF Lead
+#### 3. [Data Pipeline & OCSF Lead](https://soc.lanc3.com/ocsf)
 
 **Owns:** Logstash filter pipelines, OCSF schema mapping (CloudTrail, VPC Flow Logs, GuardDuty)
 
@@ -50,7 +50,7 @@ Reads raw AWS log formats and writes the transformation logic that normalises ev
 
 ---
 
-#### 4. Detection Engineer
+#### 4. [Detection Engineer](https://soc.lanc3.com/detection)
 
 **Owns:** Sigma rule selection/tuning, MITRE ATT&CK mapping, Kibana dashboards and Watcher alerting
 
@@ -62,7 +62,7 @@ Takes the normalised data from Role 3 and turns it into actual detection content
 
 ---
 
-#### 5. Observability & Threat Intel Lead
+#### 5. [Observability & Threat Intel Lead](https://soc.lanc3.com/observability)
 
 **Owns:** OpenTelemetry Collector, infra health dashboards, AlienVault OTX integration
 
