@@ -1,7 +1,7 @@
-## ELK Platform Engineer — Setup Guide
+## SIEM Platform Engineer — Setup Guide
 
 **Owns:** Docker Compose stack, Elasticsearch/Logstash/Kibana config, JVM tuning, Nginx reverse proxy  
-**Goal:** Get ELK running stably on a t3.medium (4GB RAM) — and understand why each tuning decision matters.
+**Goal:** Get ELK or Wuzh running stably on a t3.medium (4GB RAM) — and understand why each tuning decision matters.
 
 ----------
 

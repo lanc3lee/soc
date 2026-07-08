@@ -1,3 +1,12 @@
+### Why OpenTofu, not Terraform
+
+We've decided to use **OpenTofu** instead of Terraform for CyberStorm SIEM's infrastructure. In short: the two tools are nearly identical at the syntax level, but OpenTofu ships native client-side state encryption — which directly closes an open security gap in our design (our state file will contain sensitive data tied to the collective AI system's API keys and DynamoDB context store) — and it carries a permissive, unambiguous open-source license (MPL 2.0) with Linux Foundation governance, fitting a volunteer/community project better than a single-vendor-controlled tool. Since we have no existing Terraform/HCP investment to lose, there's no downside to making this call now, before any real infra exists.
+
+Full reasoning and the formal ADR are here: **[soc.lanc3.com/architecture/opentofu-vs-terraform](https://soc.lanc3.com/architecture/opentofu-vs-terraform)**
+
+Everything below has been updated accordingly — commands, install steps, and terminology now reference OpenTofu (`tofu`) rather than Terraform (`terraform`). The good news: because OpenTofu is a compatible fork, almost everything about *learning* IaC concepts is identical — HCL syntax, `.tf` files, the plan/apply workflow. Only the binary name and a couple of installer commands change.
+
+---
 
 ### What is IaC?
 
@@ -71,7 +80,7 @@ This is a small but important step — without it, only one person can ever safe
 
 - [https://opentofu.org/docs/language/state/encryption/](https://opentofu.org/docs/language/state/encryption/)
 
-Key provider: **AWS KMS** — decided in ADR-0003, using our existing per-volunteer IAM credentials rather than a shared passphrase, so access can be cleanly revoked as the team changes and decrypt events are auditable via CloudTrail (which we already ingest into our own SIEM).
+Key provider choice (AWS KMS vs. passphrase) still needs deciding. This was flagged as a follow-up action in ADR-0002 (the OpenTofu adoption decision) — but ADR-0002 itself only covers the choice of OpenTofu over Terraform, not this specific question. Once we decide, it should get its own ADR (e.g. ADR-0003) so the reasoning is recorded, not just the conclusion.
 
 #### Phase 4 — GitHub Actions CI/CD (Week 1, parallel)
 
@@ -276,16 +285,6 @@ aws configure
 For credentials, have your own AWS practice account ready, or the team's AWS account (paid for with sponsorship from CSA / Div0).
 
 -----
-
-
-### Why OpenTofu, not Terraform
-
-We've decided to use **OpenTofu** instead of Terraform for CyberStorm SIEM's infrastructure. In short: the two tools are nearly identical at the syntax level, but OpenTofu ships native client-side state encryption — which directly closes an open security gap in our design (our state file will contain sensitive data tied to the collective AI system's API keys and DynamoDB context store) — and it carries a permissive, unambiguous open-source license (MPL 2.0) with Linux Foundation governance, fitting a volunteer/community project better than a single-vendor-controlled tool. Since we have no existing Terraform/HCP investment to lose, there's no downside to making this call now, before any real infra exists.
-
-Full reasoning and the formal ADR are here: **[soc.lanc3.com/architecture/opentofu-vs-terraform](https://soc.lanc3.com/architecture/opentofu-vs-terraform)**
-
-
----
 
 ### Quick command cheat-sheet: Terraform → OpenTofu
 
