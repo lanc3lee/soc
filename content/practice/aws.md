@@ -150,3 +150,5 @@ While `ap-southeast-1` is perfect for performance, it's worth keeping in mind th
 If you are just spinning up small, Free Tier-eligible resources (like a `t2.micro` or `t3.micro` EC2 instance) to test things out and then tearing them down, the price difference will be pennies. However, if you plan to leave things running or start using heavier data processing/analytics services, keep an eye on the billing dashboard!
 
 **Pro Tip:** No matter which region you build in, the very next thing you should do after setting up your IAM user is to search for **Billing** in the AWS console and set up a **Zero-Spend Budget alert**. That way, if you accidentally leave something running that exceeds the Free Tier, AWS will ping your email immediately before you get a surprise bill.
+
+-----
