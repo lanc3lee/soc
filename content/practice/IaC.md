@@ -44,6 +44,16 @@ This means the same config can stand up a practice host for either platform just
 - **Local state, not remote S3 + DynamoDB.** This is a solo practice exercise — remote state and locking only earn their keep once multiple people touch the same state file. Our real project state uses S3 + DynamoDB + KMS encryption per ADR-0002 and ADR-0003 — that pattern isn't repeated here on purpose, to keep this exercise fast to run and tear down.
 - **`t2.micro`, not `t3.medium`.** Sized for the AWS free tier, not for running a real production SIEM workload under load.
 
+### Install 
+First, install tofu in your OS
+I use macOS, hence i run 
+
+```
+brew install opentofu 
+
+toufu -version 
+```
+
 ## How to prep it (edit terraform.tfvars)
 
 ```bash
@@ -71,11 +81,18 @@ tofu plan
 tofu apply
 ```
 
+--------
+
+![[tofu-initiate.png]]
+
+
+![[tofu-plan.png]]
+
 
 -------
 
 
-Once up, SSH in using the `ssh_command` output, then install ELK or Wazuh manually for now — automating the software install itself (via provisioners or a bootstrap script) is a good next practice step, not covered here.
+Once up, SSH in using the `ssh_command` output, then install ELK or Wazuh manually for now — [automating the software install itself (via provisioners or a bootstrap script) is a good next practice step](https://soc.lanc3.com/practice/bootstrap-install), not covered here.
 
 Tear down when done to avoid leaving resources running on the free-tier account:
 

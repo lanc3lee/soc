@@ -369,3 +369,20 @@ lance@LANC3 ~ %
 ```
 
 ------
+
+
+Errors I encountered when trying to launch AWS instances using OpenTofu / Terraform
+
+in this case, I realized that ap-southeast-1 does not offer t2-micro in free tier, hence it was not deployed
+
+
+
+
+
+![[tofu-apply-error-not-free.png]]
+
+
+![[AWS-free-tier.png|356]]
+
+
+![[AWS-SG-only-t3-micro.png]]

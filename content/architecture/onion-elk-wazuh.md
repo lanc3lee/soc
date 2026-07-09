@@ -1,5 +1,5 @@
 ---
-title: "ELK, Wazuh, or Security Onion: Which SIEM"
+title: Security Onion, ELK or Wizuh ?
 date: 2026-07-08
 tags:
   - cyberstorm
@@ -9,22 +9,59 @@ tags:
 draft: false
 ---
 
-> **Why not Splunk?** Splunk licenses on ingested data volume, not seats or servers, and even entry-level SIEM deployments run into real money fast — list pricing generally starts around $150–$225 per GB/day for base platform access, before the Enterprise Security add-on that most genuine SIEM deployments require, which adds another 30–60% on top. Independent trackers peg all-in Splunk SIEM cost at roughly $2,000–$3,500 per GB/year once ES is included, with total year-one cost of ownership running 2–3x the headline license line once storage, integration, and staffing are added. CyberStorm SIEM is a volunteer-run project on a sponsored AWS budget capped at a t3.medium instance, 50GB of EBS, and under 10GB of S3 — there is no ingest budget line at all, so any tool with per-GB or per-day licensing is off the table by design, not preference. That leaves us choosing between open-source, self-hosted options: **ELK**, **Wazuh**, and **Security Onion**.
+> **Why not Splunk?** Splunk licenses on ingested data volume, not seats or servers, and even entry-level SIEM deployments run into real money fast 
+> — list pricing generally starts around $150–$225 per GB/day for base platform access, before the Enterprise Security add-on that most genuine SIEM deployments require, which adds another 30–60% on top. 
+> 
+> Independent trackers peg all-in Splunk SIEM cost at roughly $2,000–$3,500 per GB/year once ES is included, with total year-one cost of ownership running 2–3x the headline license line once storage, integration, and staffing are added. 
+> 
+> CyberStorm SIEM is a volunteer-run project on a sponsored AWS budget capped at a t3.medium instance, 50GB of EBS, and under 10GB of S3 
+> — there is no ingest budget line at all, so any tool with per-GB or per-day licensing is off the table by design, not preference. 
+> 
+> That leaves us choosing between open-source, self-hosted options: **ELK**, **Wazuh**, and **Security Onion**.
 
 ## TL;DR
 
-These three aren't all competing for the same job. ELK is a data platform — storage, search, visualization — with no opinion about security. Wazuh is a security product that happens to ship its own indexer and dashboard (a fork of the OpenSearch/Elastic lineage), built host/endpoint-first. Security Onion is a turnkey network-security-monitoring distribution that bundles network IDS (Suricata), host detection, and a unified dashboard into one pre-wired stack. The real decision is really three framings: "build our own detection layer on ELK," "adopt Wazuh's endpoint-first detection layer," or "adopt Security Onion's network-first, batteries-included stack."
+These three aren't all competing for the same job. 
+
+ELK is a data platform — storage, search, visualization — with no opinion about security. 
+
+Wazuh is a security product that happens to ship its own indexer and dashboard (a fork of the OpenSearch/Elastic lineage), built host/endpoint-first. 
+
+Security Onion is a turnkey network-security-monitoring distribution that bundles network IDS (Suricata), host detection, and a unified dashboard into one pre-wired stack. 
+
+The real decision is really three framings: 
+"build our own detection layer on ELK," 
+"adopt Wazuh's endpoint-first detection layer," or 
+"adopt Security Onion's network-first, batteries-included stack."
 
 ## What each one actually is
 
 **ELK (Elasticsearch, Logstash, Kibana)**
-In summary, ELK is known for its scalability, flexibility, and log management capabilities — it's designed to handle a massive amount of data and is commonly used in IT operations, DevOps, and business intelligence, not specifically security. It provides a powerful search and visualization toolset but does not natively provide built-in alerting and notification capabilities — you build detection logic, correlation, and MITRE mapping yourself, which is exactly the work our OCSF normalization and Sigma-to-ATT&CK mapping in Logstash is already doing.
+In summary, ELK is known for its scalability, flexibility, and log management capabilities 
+— it's designed to handle a massive amount of data and is commonly used in IT operations, DevOps, and business intelligence, not specifically security. 
+
+It provides a powerful search and visualization toolset but does not natively provide built-in alerting and notification capabilities 
+— you build detection logic, correlation, and MITRE mapping yourself, which is exactly the work our OCSF normalization and Sigma-to-ATT&CK mapping in Logstash is already doing.
+
 
 **Wazuh**
-Wazuh is a free, open source and enterprise-ready security monitoring solution for threat detection, integrity monitoring, incident response and compliance, focused specifically on security monitoring and intrusion detection rather than general log management. It ships 3,000+ pre-built detection rules mapped to the MITRE ATT&CK framework, built-in file integrity monitoring, and agent-based log collection for Windows, Linux, and macOS, with agents enrolled directly from the dashboard UI. In practice it can handle 30,000+ events/second with proper hardware, and users get compliance dashboards populated automatically without extra configuration work. The tradeoff is that Wazuh is primarily designed for smaller and mid-sized environments and may have limitations when it comes to scaling compared to a purpose-built Elastic deployment.
+Wazuh is a free, open source and enterprise-ready security monitoring solution for threat detection, integrity monitoring, incident response and compliance, focused specifically on security monitoring and intrusion detection rather than general log management. 
+
+It ships 3,000+ pre-built detection rules mapped to the MITRE ATT&CK framework, built-in file integrity monitoring, and agent-based log collection for Windows, Linux, and macOS, with agents enrolled directly from the dashboard UI. 
+
+In practice it can handle 30,000+ events/second with proper hardware, and users get compliance dashboards populated automatically without extra configuration work. 
+The tradeoff is that Wazuh is primarily designed for smaller and mid-sized environments and may have limitations when it comes to scaling compared to a purpose-built Elastic deployment.
 
 **Security Onion**
-Security Onion is a free, open-source platform that combines SIEM, network security monitoring, and threat-hunting capabilities, built to help security teams detect intrusions, analyze logs, and manage security operations from one unified dashboard. It's less "single SIEM product" and more turnkey SOC distribution: it wraps Suricata for network intrusion detection alongside host-based monitoring, correlates events across both, and ships with pre-configured dashboards so a small team gets network-plus-host visibility without assembling the pieces themselves. The natural fit is an environment with real network traffic worth watching — it stands out specifically when the environment is network-heavy. The tradeoff is that it's the heaviest of the three to run: it's a full NSM distribution (its own sensor, search backend, and dashboarding), so it isn't something you bolt lightly onto an existing pipeline the way a single Wazuh agent can be.
+Security Onion is a free, open-source platform that combines SIEM, network security monitoring, and threat-hunting capabilities, built to help security teams detect intrusions, analyze logs, and manage security operations from one unified dashboard. 
+It's less "single SIEM product" and more turnkey SOC distribution: 
+it wraps Suricata for network intrusion detection alongside host-based monitoring, correlates events across both, and ships with pre-configured dashboards so a small team gets network-plus-host visibility without assembling the pieces themselves. 
+
+The natural fit is an environment with real network traffic worth watching — it stands out specifically when the environment is network-heavy. 
+
+The tradeoff is that it's the heaviest of the three to run: 
+
+it's a full NSM distribution (its own sensor, search backend, and dashboarding), so it isn't something you bolt lightly onto an existing pipeline the way a single Wazuh agent can be.
 
 ## Comparison table
 
