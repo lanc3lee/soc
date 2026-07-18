@@ -8,7 +8,8 @@ status: draft
 
 # Add BOTES Data to ELK
 
-BOTES ("Boss of the Elastic SOC") is a community project that converted the Splunk-native BOTS datasets into JSON, with matching Elasticsearch index templates and Logstash pipeline configs — so we don't have to hand-write CIM-to-ECS field mappings from scratch. Do this after completing [Install ELK](./01-install-elk.md).
+BOTES ("Boss of the Elastic SOC") is a community project that converted the Splunk-native BOTS datasets into JSON, with matching Elasticsearch index templates and Logstash pipeline configs — so we don't have to hand-write CIM-to-ECS field mappings from scratch. Do this after completing 
+https://soc.lanc3.com/practice/elk-docker.
 
 ## Prerequisites
 

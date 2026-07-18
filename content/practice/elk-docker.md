@@ -8,11 +8,17 @@ status: draft
 
 # Install ELK via Docker Compose (fast path)
 
-This is a faster alternative to the [native package install](./01-install-elk.md). Full stack up in under a minute, with no manual `elasticsearch.yml` editing — which also means none of the config landmines documented in that guide (missing-space YAML errors, orphaned SSL keys, the `discovery.type`/`initial_master_nodes` conflict).
+This is a faster alternative to native install method
+https://soc.lanc3.com/practice/elk-BotES
 
-**Use this when the goal is reps in Kibana** — hunting through BOTS data, validating Sigma rules, running a workshop. **Use the native install instead when the goal is also teaching how to actually operate Elasticsearch/Kibana as services** (systemd, native config files, production-shaped ops). This doc is optimized for the former.
 
-## Why this avoids today's errors
+Full stack up in under a minute, with no manual `elasticsearch.yml` editing — which errors in editing config 
+
+**Use this when the goal is reps in Kibana** — hunting through BOTS data, validating Sigma rules, running a workshop. 
+
+**Use the native install instead when the goal is also teaching how to actually operate Elasticsearch/Kibana as services** (systemd, native config files, production-shaped ops). This doc is optimized for the former.
+
+## Overview
 
 The official Elastic Docker images configure the basics via environment variables rather than a hand-edited YAML template, and they skip the security auto-configuration step that generates the SSL keystore secrets, self-signed certs, and enrollment tokens — the exact things that caused four rounds of debugging in the native install. There's no file to typo, no orphaned nested key, no conflicting bootstrap settings.
 
