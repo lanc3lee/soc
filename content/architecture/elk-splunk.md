@@ -110,4 +110,5 @@ Learn the concepts once, and the syntax is just a dialect.
 Join us in our journey to master CyberSecurity Blue teaming
 https://soc.lanc3.com
 
-
+Connect with me via Linkedin
+https://www.linkedin.com/in/lanc3/
